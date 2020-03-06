@@ -3,7 +3,7 @@ import discord
 import logging
 import logging.config
 
-default_extensions = ["cogs.roles"]
+default_extensions = ["cogs.roles", "cogs.general"]
 
 logging.config.dictConfig(logging_conf)
 log = logging.getLogger()
