@@ -95,7 +95,35 @@ class RolesManager(commands.Cog):
     @commands.command(aliases=["crm"])
     @commands.has_any_role(519325622162423809, 519921688511512578, 529928293680545802)
     async def create_role_message(self, ctx):
-        # TODO: Don't hardcode the Wi-Fi role in this message
+        embed, emoji_list = await self.get_role_embed(ctx)
+
+        message = await ctx.send(embed=embed)
+
+        for emoji in emoji_list:
+            await message.add_reaction(emoji)
+
+
+        with open(ENVIRONNEMENTJSON, 'w', encoding='utf-8') as f:
+            self.roles_config['self_assign_message'] = message.id
+            self.roles_config['self_assign_message_channel'] = message.channel.id
+            json.dump(self.roles_config, f)
+
+
+    @commands.command(aliases=["urm"])
+    @commands.has_any_role(519325622162423809, 519921688511512578, 529928293680545802)
+    async def update_role_message(self, ctx):
+        embed, emoji_list = await self.get_role_embed(ctx)
+
+        channel = self.bot.get_channel(self.roles_config['self_assign_message_channel'])
+        message = await channel.fetch_message(self.roles_config['self_assign_message'])
+
+        for emoji in emoji_list:
+            await message.add_reaction(emoji)
+
+        await message.edit(embed=embed)
+
+
+    async def get_role_embed(self, ctx):
         embed = discord.Embed(title="Roles", colour=discord.Colour(
             0x32ad5a), description="Pour vous assigner une région, cliquez simplement sur la reaction avec l'emoji correspondant à la région désirée.\n\nUn rôle {} est également disponible afin de signaler aux autres membres que vous souhaitez jouer en ligne.".format(ctx.guild.get_role(527673156597448714).mention))
 
@@ -125,17 +153,7 @@ class RolesManager(commands.Cog):
 
         embed.add_field(name="Autres", value=other_list)
 
-        message = await ctx.send(embed=embed)
-
-        for emoji in emoji_list:
-            await message.add_reaction(emoji)
-
-
-        with open(ENVIRONNEMENTJSON, 'w', encoding='utf-8') as f:
-            self.roles_config['self_assign_message'] = message.id
-            self.roles_config['self_assign_message_channel'] = message.channel.id
-            json.dump(self.roles_config, f)
-
+        return embed, emoji_list
 
 def setup(bot):
     bot.add_cog(RolesManager(bot))
