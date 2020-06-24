@@ -125,7 +125,7 @@ class RolesManager(commands.Cog):
 
     async def get_role_embed(self, ctx):
         embed = discord.Embed(title="Roles", colour=discord.Colour(
-            0x32ad5a), description="Pour vous assigner une région, cliquez simplement sur la reaction avec l'emoji correspondant à la région désirée.\n\nUn rôle {} est également disponible afin de signaler aux autres membres que vous souhaitez jouer en ligne.".format(ctx.guild.get_role(527673156597448714).mention))
+            0x32ad5a), description="Pour vous assigner une région, cliquez simplement sur la reaction avec l'emoji correspondant à la région désirée.\n\nDes rôles WiFi sont également disponible afin de signaler aux autres membres que vous souhaitez jouer en ligne.")
 
         emoji_list = []
 
